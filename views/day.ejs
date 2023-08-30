@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* background: rgb(64, 164, 1);
+            background: linear-gradient(347deg, rgba(64, 164, 1, 1) 15%, rgba(253, 255, 254, 1) 50%, rgba(255, 119, 34, 1) 85%); */
+            /* background: rgb(64, 164, 1);
+            background: linear-gradient(347deg, rgba(64, 164, 1, 1) 4%, rgba(126, 210, 169, 1) 50%, rgba(255, 119, 34, 1) 96%); */
+            background: rgb(238, 174, 202);
+            background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+        }
+
+        #search-submit {
+            height: 33px;
+            border-radius: 20px;
+            margin-left: 6px;
+            background-color: #fdfdfd;
+            filter: blur(0.7px);
+            box-shadow: 1px 1px 1px black;
+            /* padding: 0px; */
+            margin-right: 4px;
+            align-items: center;
+            justify-content: center;
+            width: 37px;
+            display: flex;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .icon {
+
+            grid-area: icons;
+            display: flex;
+            box-sizing: border-box;
+            align-items: center;
+
+
+        }
+
+        .search-bar {
+            grid-area: search;
+            align-items: center;
+            display: flex;
+            /* margin-top: 30px; */
+            height: 100%;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+
+
+        #search-text {
+            height: 20px;
+            border: none;
+            text-align: center;
+            filter: blur(0.7px);
+            width: 89%;
+            box-shadow: 1px 1px 1px black;
+            padding: 6px;
+            font-size: 20px;
+            border-radius: 25px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: inset 0 -3px 0 0 #a683e3;
+            padding: 0px 15px 0px 25px;
+        }
+
+        .city-name {
+            grid-area: name;
+            margin-bottom: 50px;
+            /* align-items: center; */
+            text-align: center;
+            display: flex;
+            /* justify-content: center; */
+        }
+
+        .temp {
+            grid-area: temp;
+            display: flex;
+            justify-content: center;
+        }
+
+        .extra {
+            grid-area: extra;
+            display: flex;
+            text-align: end;
+            /* justify-content: center; */
+            flex-direction: column;
+        }
+
+        .day {
+            grid-area: day;
+            /* text-align: center; */
+            display: flex;
+            /* justify-content: center; */
+            /* align-items: center; */
+        }
+
+
+        .container {
+            margin-top: 20px;
+            background-image: url(/images/after_noon.png);
+            background-size: 100%;
+            box-sizing: border-box;
+            width: 21%;
+            border-radius: 10px;
+            filter: drop-shadow(0px 4px 10px black);
+            display: grid;
+            grid-auto-rows: 16% 42% 26%;
+            grid-auto-columns: 23% 77%;
+            grid-template-areas:
+                'icons search'
+                'temp temp'
+                'name name'
+                'day extra';
+            height: 60vh;
+        }
+
+
+
+        .city-name>h1 {
+            display: inline;
+            /* filter: drop-shadow(0px -1px 1px black); */
+            color: #000000;
+            /* box-shadow: 0px 1px 1px; */
+            width: 100%;
+            text-shadow: 1px -2px 3px #c39748;
+            filter: blur(0.6px);
+            font-family: 'Dancing Script', cursive;
+            margin-top: 0px;
+        }
+
+        h2 {
+            display: inline;
+        }
+
+        #form {
+            margin-top: 0px;
+            padding-bottom: 0px;
+            margin-left: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        body>div>div.icon>img {
+
+            filter: drop-shadow(2px 4px 6px black);
+            height: 40px;
+            margin: 0px 0px 0px 8px;
+        }
+
+        body>div.container>div.temp>h2 {
+            font-size: 145px;
+            margin-left: 45px;
+            filter: blur(0.7px);
+            text-shadow: 2px 2px 3px #472800;
+            margin-bottom: 0;
+            font-family: sans-serif;
+            margin-top: 0;
+        }
+
+        .day-text {
+            margin-top: 0px;
+            font-size: 14px;
+            filter: blur(0.4px);
+            margin-left: 7px;
+            margin-bottom: 0px;
+            font-weight: 100;
+            font-family: system-ui;
+        }
+
+        .hum {
+            font-size: 14px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            font-family: system-ui;
+            filter: blur(0.4px);
+            margin-right: 11px;
+            font-weight: 100;
+        }
+
+        .pres {
+            font-size: 16px;
+            font-family: system-ui;
+
+            margin-top: 0px;
+            filter: blur(0.4px);
+
+            font-weight: 100;
+            margin-right: 11px;
+        }
+
+        /* --------------------------------------------- */
+
+        /* media query */
+
+        @media screen and (max-width: 1280px) {
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 26%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-rows: 15% 44% 26%;
+                grid-auto-columns: 19% 81%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+                /* height: 29px; */
+                margin: 0px 0px 0px 11px;
+            }
+
+            body>div.container>div.temp>h2 {
+
+                font-size: 150px;
+                margin-left: 57px;
+                filter: blur(0.7px);
+                text-shadow: 2px 2px 3px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0;
+            }
+
+            .city-name>h1 {
+                display: inline;
+                /* filter: drop-shadow(0px -1px 1px black); */
+                color: #000000;
+                font-size: 33px;
+                /* box-shadow: 0px 1px 1px; */
+                /* text-shadow: 1px -2px 3px #c39748; */
+                filter: blur(0.6px);
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+            }
+
+            #search-submit {
+                height: 30px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                /* padding: 0px; */
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                display: flex;
+                font-size: 20px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 17px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                width: 89%;
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 16px;
+                border-radius: 25px;
+            }
+
+            .day-text {
+                /* margin-top: 15px; */
+                font-size: 14px;
+                filter: blur(0.4px);
+                margin-left: 10px;
+                margin-bottom: 30px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .hum {
+                font-size: 14px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 11px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 14px;
+                font-family: system-ui;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                font-weight: 100;
+                margin-right: 12px;
+            }
+        }
+
+        @media screen and (max-width: 1130px) {
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 30%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-rows: 15% 44% 26%;
+                grid-auto-columns: 19% 81%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+                /* height: 29px; */
+                margin: 0px 0px 0px 11px;
+            }
+
+            body>div.container>div.temp>h2 {
+
+                font-size: 150px;
+                margin-left: 57px;
+                filter: blur(0.7px);
+                text-shadow: 2px 2px 3px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0;
+            }
+
+            .city-name>h1 {
+                display: inline;
+                /* filter: drop-shadow(0px -1px 1px black); */
+                color: #000000;
+                font-size: 33px;
+                /* box-shadow: 0px 1px 1px; */
+                /* text-shadow: 1px -2px 3px #c39748; */
+                filter: blur(0.6px);
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+            }
+
+            #search-submit {
+                height: 30px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                /* padding: 0px; */
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                display: flex;
+                font-size: 20px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 17px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                width: 89%;
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 16px;
+                border-radius: 25px;
+            }
+
+            .day-text {
+                /* margin-top: 15px; */
+                font-size: 14px;
+                filter: blur(0.4px);
+                margin-left: 10px;
+                margin-bottom: 30px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .hum {
+                font-size: 14px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 11px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 14px;
+                font-family: system-ui;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                font-weight: 100;
+                margin-right: 12px;
+            }
+        }
+
+        @media screen and (max-width: 945px) {
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 34%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-rows: 15% 44% 26%;
+                grid-auto-columns: 19% 81%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+
+            }
+
+            .icon {
+                grid-area: icons;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 146px;
+                margin-left: 61px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0;
+            }
+
+            .city-name>h1 {
+                display: inline;
+                /* filter: drop-shadow(0px -1px 1px black); */
+                color: #000000;
+                font-size: 28px;
+                /* box-shadow: 0px 1px 1px; */
+                /* text-shadow: 1px -2px 3px #c39748; */
+                filter: blur(0.6px);
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-bottom: 0;
+            }
+
+            #search-submit {
+                height: 30px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                /* padding: 0px; */
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                display: flex;
+                font-size: 20px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 15px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                width: 89%;
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 14px;
+                border-radius: 25px;
+            }
+
+            .day-text {
+                /* margin-top: 15px; */
+                margin-top: 15px;
+                font-size: 14px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 10px;
+                margin-bottom: 19px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .hum {
+                font-size: 14px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 12px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 14px;
+                font-family: system-ui;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                font-weight: 100;
+                margin-right: 12px;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+                /* height: 40px; */
+                margin: 0px 0px 0px 0px;
+            }
+
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                margin-left: 0;
+                display: flex;
+                align-items: center;
+            }
+
+            .search-bar {
+                grid-area: search;
+                align-items: center;
+                display: flex;
+                /* margin-top: 30px; */
+                justify-content: center;
+                /* width: 100%; */
+                margin-bottom: 0px;
+            }
+
+        }
+
+        @media screen and (max-width: 830px) {
+            .search-bar {
+                grid-area: search;
+                align-items: center;
+                display: flex;
+                margin-top: 0px;
+                /* align-items: center; */
+                justify-content: center;
+                /* width: 108%; */
+                margin-bottom: 0px;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 43%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-rows: 15% 41% 23% 21%;
+                grid-auto-columns: 18% 82%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+
+            body>div.container>div.temp>h2 {
+                font-size: 147px;
+                margin-left: 54px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0;
+            }
+
+            .city-name>h1 {
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 10px;
+                margin-right: 9px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                display: flex;
+                font-size: 35px;
+                cursor: pointer;
+                border: none;
+
+            }
+
+            #search-submit {
+                height: 34px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                display: flex;
+                font-size: 17px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 19px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                width: 186px;
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 20px;
+                border-radius: 25px;
+            }
+
+            .day {
+                grid-area: day;
+                /* text-align: center; */
+                display: flex;
+                /* justify-content: center; */
+                align-items: center;
+            }
+
+            .day-text {
+                font-size: 14px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 10px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .hum {
+                font-size: 14px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 12px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 14x;
+                font-family: system-ui;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                font-weight: 100;
+                margin-right: 12px;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+                height: 50px;
+                margin: 0px 0px 0px 0px;
+            }
+
+            #form {
+                margin-top: 0px;
+                padding-bottom: 0px;
+                /* margin-left: 0; */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        }
+
+        @media screen and (max-width: 690px) {
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                /* margin-left: 0; */
+                display: flex;
+                align-items: center;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 53%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-rows: 15% 48% 22%;
+                grid-auto-columns: 18% 82%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 151px;
+                margin-left: 48px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0px;
+            }
+
+            .city-name>h1 {
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-right: 9px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                /* width: 32px; */
+                display: flex;
+                font-size: 42px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-submit {
+                height: 37px;
+                border-radius: 20px;
+                margin-left: 5px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                /* margin-right: -11px; */
+                align-items: center;
+                justify-content: center;
+                width: 38px;
+                display: flex;
+                font-size: 19px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 20px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 18px;
+                border-radius: 25px;
+            }
+
+            .day-text {
+                font-size: 14px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 5px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .hum {
+                font-size: 14px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-top: 0px;
+                margin-right: 12px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 14px;
+                margin-top: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 12px;
+                margin-bottom: 0px;
+                font-weight: 100;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                /* margin-bottom: -23px; */
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+                /* height: 60px; */
+                margin: 0px 0px 0px 0px;
+            }
+
+            .icon {
+                grid-area: icons;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .search-bar {
+                grid-area: search;
+                /* align-items: center; */
+                display: flex;
+                margin-top: 0px;
+                align-items: center;
+                justify-content: center;
+                /* width: 108%; */
+                margin-bottom: 0px;
+            }
+        }
+
+        @media screen and (max-width: 615px) {
+            .icon {
+                grid-area: icons;
+                align-items: center;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .city-name {
+                grid-area: name;
+                margin-bottom: 28px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                /* margin-left: 0; */
+                display: flex;
+                align-items: center;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 60%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-columns: 18% 82%;
+                grid-auto-rows: 16% 44% 20% 20%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 151px;
+                margin-left: 48px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0px;
+
+            }
+
+            .city-name>h1 {
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                /* width: 32px; */
+                display: flex;
+                font-size: 35px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-submit {
+                height: 34px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                display: flex;
+                font-size: 17px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 18px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 17px;
+                border-radius: 25px;
+            }
+
+            .day-text {
+                font-size: 13px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 5px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .hum {
+                font-size: 13px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 13px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 13px;
+                margin-top: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 14px;
+                font-weight: 100;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
+
+        @media screen and (max-width: 575px) {
+            .day-text {
+                font-size: 13px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 5px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .icon {
+                grid-area: icons;
+                align-items: center;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .city-name {
+                grid-area: name;
+                margin-bottom: 28px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                /* margin-left: 0; */
+                display: flex;
+                align-items: center;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 60%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-columns: 18% 82%;
+                grid-auto-rows: 16% 44% 20% 20%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 151px;
+                margin-left: 51px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0px;
+
+            }
+
+            .city-name>h1 {
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                /* width: 32px; */
+                display: flex;
+                font-size: 35px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-submit {
+                height: 34px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                display: flex;
+                font-size: 17px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 18px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 17px;
+                border-radius: 25px;
+            }
+
+            .hum {
+                font-size: 13px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 13px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 13px;
+                margin-top: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 14px;
+                font-weight: 100;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
+
+        @media screen and (max-width: 525px) {
+            .day-text {
+                font-size: 13px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 5px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .icon {
+                grid-area: icons;
+                align-items: center;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .city-name {
+                grid-area: name;
+                margin-bottom: 28px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                /* margin-left: 0; */
+                display: flex;
+                align-items: center;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 70%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-columns: 18% 82%;
+                grid-auto-rows: 16% 44% 20% 20%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 151px;
+                margin-left: 53px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0px;
+
+            }
+
+            .city-name>h1 {
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                /* width: 32px; */
+                display: flex;
+                font-size: 35px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-submit {
+                height: 34px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                display: flex;
+                font-size: 17px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 18px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 17px;
+                border-radius: 25px;
+            }
+
+            .hum {
+                font-size: 13px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 13px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 13px;
+                margin-top: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 14px;
+                font-weight: 100;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
+
+        @media screen and (max-width: 428px) {
+            .day-text {
+                font-size: 13px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 5px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .icon {
+                grid-area: icons;
+                align-items: center;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .city-name {
+                grid-area: name;
+                margin-bottom: 28px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                /* margin-left: 0; */
+                display: flex;
+                align-items: center;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 83%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-columns: 18% 82%;
+                grid-auto-rows: 16% 44% 20% 20%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 151px;
+                margin-left: 51px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0px;
+            }
+
+            .city-name>h1 {
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                /* width: 32px; */
+                display: flex;
+                font-size: 35px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-submit {
+                height: 34px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                display: flex;
+                font-size: 17px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 18px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 17px;
+                border-radius: 25px;
+            }
+
+
+            .hum {
+                font-size: 13px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 13px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 13px;
+                margin-top: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 14px;
+                font-weight: 100;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
+
+        @media screen and (max-width: 370px) {
+            .day-text {
+                font-size: 13px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 5px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .icon {
+                grid-area: icons;
+                align-items: center;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .city-name {
+                grid-area: name;
+                margin-bottom: 28px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                /* margin-left: 0; */
+                display: flex;
+                align-items: center;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 97%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-columns: 18% 82%;
+                grid-auto-rows: 16% 44% 20% 20%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 151px;
+                margin-left: 52px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 0px;
+
+            }
+
+            .city-name>h1 {
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                /* width: 32px; */
+                display: flex;
+                font-size: 35px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-submit {
+                height: 34px;
+                border-radius: 20px;
+                margin-left: 6px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 9px;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                display: flex;
+                font-size: 17px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 18px;
+                border: none;
+                text-align: center;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                padding: 6px;
+                font-size: 17px;
+                border-radius: 25px;
+            }
+
+            .hum {
+                font-size: 13px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 13px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 13px;
+                margin-top: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 14px;
+                font-weight: 100;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+        }
+
+        @media screen and (max-width: 313px) {
+            .day-text {
+                font-size: 14px;
+                margin-top: 0px;
+                filter: blur(0.4px);
+                margin-left: 5px;
+                margin-bottom: 0px;
+                font-weight: 100;
+                font-family: system-ui;
+            }
+
+            .icon {
+                grid-area: icons;
+                align-items: center;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .city-name {
+                grid-area: name;
+                margin-bottom: 28px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #form {
+                margin-top: 0px;
+                /* padding-bottom: 4px; */
+                /* margin-left: 0; */
+                width: 90%;
+                display: flex;
+                align-items: center;
+            }
+
+            .container {
+                background-image: url(/images/after_noon.png);
+                background-size: 100%;
+                box-sizing: border-box;
+                width: 100%;
+                border-radius: 10px;
+                filter: drop-shadow(0px 4px 10px black);
+                display: grid;
+                grid-auto-columns: 22% 78%;
+                grid-auto-rows: 16% 44% 20% 20%;
+                grid-template-areas:
+                    'icons search'
+                    'temp temp'
+                    'name name'
+                    'day extra';
+                height: 60vh;
+            }
+
+            body>div.container>div.temp>h2 {
+                font-size: 119px;
+                margin-left: 32px;
+                filter: blur(0.7px);
+                text-shadow: 1px 1px 4px #472800;
+                margin-bottom: 0;
+                font-family: sans-serif;
+                margin-top: 36px;
+            }
+
+            .city-name>h1 {
+
+                color: #000000;
+                font-family: 'Dancing Script', cursive;
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                display: flex;
+                font-size: 32px;
+                cursor: pointer;
+                border: none;
+
+            }
+
+            #search-submit {
+                height: 34px;
+                border-radius: 20px;
+                margin-left: 3px;
+                background-color: #fdfdfd;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 0px;
+                align-items: center;
+                justify-content: center;
+                width: 35px;
+                display: flex;
+                font-size: 17px;
+                cursor: pointer;
+                border: none;
+            }
+
+            #search-text {
+                height: 18px;
+                border: none;
+                width: 73%;
+                text-align: center;
+                filter: blur(0.7px);
+                box-shadow: 1px 1px 1px black;
+                margin-right: 2px;
+                padding: 6px;
+                font-size: 17px;
+                border-radius: 25px;
+            }
+
+            .hum {
+                font-size: 13px;
+                margin-bottom: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 13px;
+                font-weight: 100;
+            }
+
+            .pres {
+                font-size: 13px;
+                margin-top: 0px;
+                font-family: system-ui;
+                filter: blur(0.4px);
+                margin-right: 14px;
+                font-weight: 100;
+            }
+
+            .extra {
+                grid-area: extra;
+                display: flex;
+                text-align: end;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            body>div>div.icon>img {
+                filter: drop-shadow(2px 4px 6px black);
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="search-bar">
+            <form action="/submit" id="form" method="POST">
+                <input type="text" id="search-text" name="cityName">
+                <input id="search-submit" type="submit" value="🔍">
+            </form>
+        </div>
+        <div class="icon">
+            <img src="<%= locals.ic %>" alt="weather-icon">
+        </div>
+
+        <div class="city-name">
+            <h1>
+                <%= locals.ci %>
+            </h1>
+        </div>
+        <div class="temp">
+            <h2>
+                <%= locals.te %>&deg;
+            </h2>
+        </div>
+        <div class="day">
+            <h2 class="day-text">
+                <%= locals.we %>
+            </h2>
+        </div>
+        <div class="extra">
+            <h2 class="hum">Humidity: <%= locals.hu %>% </h2>
+        </div>
+    </div>
+</body>
+
+</html>
